@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    datahub_setup_job: "true"
+    kompose.cmd: C:\Users\tasmiya_kadur\demo\kompose.exe convert -f docker-compose.yaml -o manifest/
+    kompose.version: 1.24.0 (7c629530)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: mysql-setup
+  name: mysql-setup
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: mysql-setup
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        datahub_setup_job: "true"
+        kompose.cmd: C:\Users\tasmiya_kadur\demo\kompose.exe convert -f docker-compose.yaml -o manifest/
+        kompose.version: 1.24.0 (7c629530)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/: "true"
+        io.kompose.service: mysql-setup
+    spec:
+      containers:
+        - env:
+            - name: DATAHUB_DB_NAME
+              value: datahub
+            - name: MYSQL_HOST
+              value: mysql
+            - name: MYSQL_PASSWORD
+              value: datahub
+            - name: MYSQL_PORT
+              value: "3306"
+            - name: MYSQL_USERNAME
+              value: datahub
+          image: acryldata/datahub-mysql-setup:head
+          name: mysql-setup
+          resources: {}
+      hostname: mysql-setup
+      restartPolicy: Always
+status: {}
